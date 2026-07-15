@@ -2,9 +2,9 @@
 
 This guide is for people who receive the desktop jar:
 
-```text
-facturx-utils-0.3.0.jar
-```
+
+[facturx-utils-0.3.0.jar](https://github.com/Duclevn/facturx-utils-release/releases/download/v0.3.0/facturx-utils-0.3.0.jar)
+
 
 Facturx-utils is a desktop app for opening, viewing, editing, validating, and saving Factur-X invoice files. It supports Factur-X `.pdf` invoices and standalone `.xml` invoices using CII or UBL syntax. CII and UBL are XML formats, not file extensions.
 
