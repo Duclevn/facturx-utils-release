@@ -3,18 +3,20 @@
 This guide is for people who receive the desktop jar:
 
 ```text
-facturx-utils-0.2.0.jar
+facturx-utils-0.3.0.jar
 ```
 
-Facturx-utils is a desktop app for opening, viewing, editing, validating, and saving Factur-X invoice files. It supports Factur-X PDF invoices and standalone XML-style invoice files such as `.xml`(cii and ubl).
+Facturx-utils is a desktop app for opening, viewing, editing, validating, and saving Factur-X invoice files. It supports Factur-X `.pdf` invoices and standalone `.xml` invoices using CII or UBL syntax. CII and UBL are XML formats, not file extensions.
 
-## What's New In Version 0.2.0
+## Recent Highlights
 
-- Check whether the seller and buyer electronic addresses are published as Peppol participants in the Production and Test networks.
-- Inspect published Peppol document types and active Billing endpoints.
+- Check whether seller, buyer, or manually entered electronic addresses are published as Peppol participants in the Production and Test networks.
+- Compare the exact invoice type independently in each environment and inspect published document types, the Billing Invoice access point, and optional SMP Business Card details.
+- Validate with the dedicated France CTC route and bundled official FNFE RFE 1.4.0.01 resources.
 - Generate France CTC Flow 1 (`F1`) XML in the Base or Full profile from the current CII or UBL invoice.
 - Review, edit, validate, and save converted UBL and generated France CTC F1 XML in dedicated tabs.
 - Benefit from a clearer Summary layout, selectable result text, more responsive background processing, and assorted stability fixes.
+- Open `About Facturx-utils` at the bottom of the left sidebar for the release version, author link, privacy note, quick-start reminder, and acknowledgements for the main components used by the app.
 
 ## 1. What You Receive
 
@@ -79,21 +81,23 @@ Put the jar in a folder you can find, for example `Downloads` or `Documents`.
 Open PowerShell in that folder and run:
 
 ```powershell
-java -jar .\facturx-utils-0.2.0.jar
+java -jar .\facturx-utils-0.3.0.jar
 ```
 
 If the jar is in another folder, use the full path:
 
 ```powershell
-java -jar "C:\Users\YourName\Downloads\facturx-utils-0.2.0.jar"
+java -jar "C:\Users\YourName\Downloads\facturx-utils-0.3.0.jar"
 ```
 
 Double-clicking the jar may not show useful error messages on some Windows machines, so PowerShell is recommended for the first launch.
 
+The workbench opens maximized by default. Use the standard window controls if you prefer a smaller window.
+
 On macOS, open Terminal in the folder containing the jar and run:
 
 ```sh
-java -jar ./facturx-utils-0.2.0.jar
+java -jar ./facturx-utils-0.3.0.jar
 ```
 
 Important: because JavaFX uses operating-system-specific and CPU-specific files, use a jar built for the same platform as the user. For example, share the Windows x64 jar with Windows x64 users, the macOS Intel jar with Intel Mac users, and the macOS Apple Silicon jar with M-series Mac users.
@@ -103,7 +107,7 @@ Important: because JavaFX uses operating-system-specific and CPU-specific files,
 1. Click `Open invoice`.
 2. Choose one of these file types:
    - `.pdf` for a Factur-X PDF invoice
-   - `.xml`
+   - `.xml` for a standalone invoice using CII or UBL syntax
 3. Wait for the invoice to load.
 
 For a PDF invoice, the app shows:
@@ -162,9 +166,9 @@ Available actions:
 
 When you edit the XML, the app marks the invoice as `Unsaved`.
 
-## 8. Check Peppol Participant Status
+## 8. Check Peppol Participant Information
 
-The `Summary` tab shows a `Peppol Status` area for the seller and buyer. The app reads the standard electronic-address fields from the invoice and first checks locally whether each address has an eligible Peppol participant scheme.
+The `Summary` tab shows a `Peppol participant information` area for the seller and buyer. The app reads only the standard electronic-address fields from the invoice and first checks locally whether each address has an eligible Peppol participant scheme. It does not substitute a tax ID, legal ID, generic party ID, or email address.
 
 To check publication status:
 
@@ -172,30 +176,44 @@ To check publication status:
 2. Review the detected seller and buyer electronic addresses and schemes.
 3. Click `Check Participant Information`.
 4. Review the separate `Production` and `Test` results.
-5. Expand a result to inspect published document types and Billing endpoint details. Click `Refresh` to run the checks again.
+5. Review the invoice-type badge in each Production and Test row, then expand a result to inspect the discovery details. These can include the SML DNS zone, SMP URL, a single active Billing Invoice access-point URL, published document types, and optional Business Card company names, country, and registration date when the SMP provides them. Click `Refresh` to bypass the short-lived cache and run the checks again.
 
-Possible results include registered with Billing support, registered without a published Billing capability, not registered, and lookup failed. A missing address, missing or invalid `schemeID`, email address, or non-registrable scheme is explained without sending a lookup.
+Production and Test have independent badges: `✔ Invoice type supported`, `⚠ Invoice type not supported`, or `❔ Invoice type unknown`. The comparison uses the invoice's exact Peppol document type identifier (syntax, Invoice/CreditNote type, customization/profile, and syntax version) against the document types published in that environment. Test support does not imply Production support.
 
-This is the only feature that requires internet access. It queries Peppol SML/SMP discovery services only when you click the button; opening and validating an invoice does not automatically perform a Peppol lookup. A result describes discovery metadata at the time of the check and is not a guarantee that a future document transmission will succeed.
+Registration and invoice-type support are separate results. A participant can be registered while not publishing the exact document type required by the open invoice. Possible registration results are registered, not registered, and lookup failed. A missing address, missing or invalid `schemeID`, email address, or non-registrable scheme is explained without sending a lookup.
+
+Peppol lookup is the only area that requires internet access. It queries Peppol SML/SMP discovery services only when you explicitly run a lookup; opening and validating an invoice do not automatically contact the network. A result describes discovery metadata at the time of the check and is not a guarantee that a future document transmission will succeed.
+
+### Look up any Peppol participant
+
+Use `Utilities` > `Peppol lookup` in the left sidebar when the participant is not taken from the open invoice.
+
+1. Enter an identifier such as `0225:152857363`. The full `iso6523-actorid-upis::0225:152857363` form is also accepted.
+2. Click `Look up participant` or press Enter.
+3. Review the separate Production and Test results below the search box.
+4. Expand the environment details to inspect its SML/SMP source, published document types, available Billing Invoice access-point URL, and optional Business Card.
+
+The identifier is checked locally before any request is sent. Each lookup is user initiated, Production and Test stay independent, and a network failure remains distinct from a participant that is not registered.
 
 ## 9. Validate The Invoice
 
 Choose a validation profile in the left sidebar:
 
 - `Default`: general Factur-X / EN 16931 validation.
-- `France CTC`: France CTC-focused validation.
+- `France CTC`: official FNFE validation in the prescribed order: structural XSD, syntax/profile business rules, then both the standard and transition `_WARNING` French reform artefacts.
 
 Click `Validate`.
 
-The app opens the `Validation` tab and shows issues with:
+The app opens the `Validation` tab with an overall result and error, warning, and information counts. Use the severity filter or search field to narrow the findings. Select an issue to inspect its error ID, complete message, element XPath, failed XPath test, validation layer, rule artefact, source document, and Schematron role when the validator supplies those details.
 
 - Severity
-- Layer
-- Code
+- Validation layer
+- Rule code
 - Message
-- Context
+- Element/context, XPath test, source, and artefact in the detail panel
 
 If there are no validation issues, the table reports an OK result.
+During the 2026 transition period, the app intentionally runs both FNFE French reform variants. Standard findings show future strict compliance, while `FNFE French reform warning` shows the warning-mode controls applicable before September 1, 2026. Similar rule IDs can therefore appear in both layers and are not deduplicated. Warnings remain non-blocking; validator execution failures and error/fatal assertions block strict saving. The warning artefact can still contain explicitly fatal exceptions, including applicable multi-vendor rules.
 
 For PDF invoices, validation checks the saved PDF. If the XML editor contains unsaved changes, the app also validates the edited XML and combines the results for display.
 
@@ -219,7 +237,7 @@ Open the `XML` tab and click `Convert to UBL`.
 
 The button is enabled only when the opened invoice uses CII syntax. This can be:
 
-- A standalone CII XML file, such as `.xml` or `.cii`.
+- A standalone `.xml` file using CII syntax.
 - A Factur-X PDF whose embedded invoice XML is CII.
 
 The app converts the current XML content and opens the result in a `Converted UBL` tab. The original invoice is not overwritten.
@@ -228,13 +246,14 @@ In the result tab, you can:
 
 - Edit or format the generated XML.
 - Validate it using the currently selected `Default` or `France CTC` validation profile.
-- Click `Save` and choose where to write the UBL XML file.
+- Click `Save as...` and choose where to write the UBL XML file.
 
 The suggested output names follow this pattern:
 
 - `invoice.xml` becomes `invoice.ubl.xml`.
-- `invoice.cii` becomes `invoice.ubl.xml`.
 - `invoice.pdf` becomes `invoice.ubl.xml`.
+
+In `invoice.ubl.xml`, `ubl` labels the generated XML syntax; the file extension is `.xml`.
 
 For France CTC compatibility, the app also cleans up converted UBL identifiers that have no `schemeID` in contexts where France CTC requires one. The app does not invent a scheme. Properly schemed identifiers are kept.
 
@@ -246,7 +265,7 @@ Open any supported CII or UBL invoice, then select `FR CTC F1` in the `XML` tab.
 2. Click `Generate`.
 3. Review the generated `France CTC F1 Base (...)` or `France CTC F1 Full (...)` tab.
 4. Use `Format XML`, `Validate`, or edit the XML if needed.
-5. Click `Save` and choose an output location.
+5. Click `Save as...` and choose an output location.
 
 The generator keeps the source syntax: CII input produces CII F1 XML, while UBL invoice or credit-note input produces UBL F1 XML. It extracts the fields required by the chosen France CTC F1 profile and applies the supported Flow 1 management mappings. Validation in the generated tab checks F1 completeness for the selected Base or Full profile.
 
@@ -254,9 +273,9 @@ The source invoice is not overwritten. The suggested filename is prefixed with t
 
 ## 13. Save Changes
 
-Click `Save invoice`.
+Click `Save changes`.
 
-The app asks for confirmation because saving overwrites the currently opened invoice file.
+The app shows the complete source path and lets you either overwrite the opened invoice or use `Save a copy...`. Saving a copy stages the new file before replacing the selected destination, so the original invoice remains unchanged.
 
 Important:
 
@@ -290,7 +309,7 @@ java -version
 Run it from PowerShell so you can see the error:
 
 ```powershell
-java -jar .\facturx-utils-0.2.0.jar
+java -jar .\facturx-utils-0.3.0.jar
 ```
 
 Check that:
@@ -321,9 +340,7 @@ Installing a JDK distribution that includes JavaFX can work around some JavaFX s
 Check that the file is one of:
 
 - `.pdf`
-- `.xml`
-- `.cii`
-- `.ubl`
+- `.xml` using CII or UBL syntax
 
 For PDF files, the PDF must contain embedded Factur-X XML.
 
