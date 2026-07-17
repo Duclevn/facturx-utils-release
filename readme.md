@@ -339,10 +339,4 @@ Check your internet connection and whether a firewall, proxy, or DNS policy bloc
 
 ## 15. Safe Use Recommendation
 
-Before editing a real customer or production invoice, make a copy of the file and test the workflow on the copy:
-
-```powershell
-Copy-Item .\invoice.pdf .\invoice-working-copy.pdf
-```
-
-Open and edit the working copy first. Only replace the original after you have validated the result.
+Before editing a real customer or production invoice, make a copy of the file and test the workflow on the copy.
