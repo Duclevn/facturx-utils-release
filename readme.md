@@ -41,8 +41,10 @@ This guide applies to the [facturx-utils-0.4.0.jar](https://github.com/Duclevn/f
 ## 1. What You Receive
 
 The workbench is delivered as one runnable jar. That file contains the app plus the libraries it needs for PDF rendering, Factur-X extraction, XML editing, validation rules, UBL/CII conversion in both directions, and JavaFX desktop controls.
-
 Because those libraries are bundled, the jar can be around 70-80 MB. This is normal for the full offline workbench. Users do not need Maven or the source code; they only need Java 21 or newer and the correct jar for their operating system and CPU architecture.
+
+<img width="2564" height="1700" alt="image" src="https://github.com/user-attachments/assets/eb14b6c5-5413-43e4-bb13-698684d53d97" />
+
 
 ## 2. Install Java
 
@@ -161,6 +163,7 @@ Use `Utilities` > `Peppol lookup` in the left sidebar when the participant is no
 The identifier is checked locally before any request is sent. Each lookup is user initiated, Production and Test stay independent, and a network failure remains distinct from a participant that is not registered.
 
 ## 9. Validate The Invoice
+<img width="2564" height="1700" alt="image" src="https://github.com/user-attachments/assets/f7dfdd87-cb66-4188-84cb-06ed4c794c88" />
 
 Choose a validation profile in the left sidebar:
 
