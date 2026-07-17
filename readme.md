@@ -56,44 +56,6 @@ Recommended download page:
 
 - Oracle Java downloads: https://www.oracle.com/java/technologies/downloads/
 
-For Windows users:
-
-1. Open the Oracle Java downloads page.
-2. Select:
-   - Java version: `21`
-   - Operating System: `Windows`
-   - Architecture: usually `x64`
-3. Download the Windows `.msi` installer for the JDK.
-4. Run the installer and keep the default options.
-5. Open a new PowerShell or Command Prompt window and check:
-
-```powershell
-java -version
-```
-
-The command should print version `21` or newer. Java `21`, `22`, `23`, `24`, `25`, or newer is fine.
-
-For macOS users:
-
-1. Open Terminal.
-2. Check the Mac CPU architecture:
-
-```sh
-uname -m
-```
-
-The result tells you which kind of Mac you have:
-
-- `arm64`: Apple Silicon, such as M1, M2, M3, M4, or M5. Use a macOS Apple Silicon / AArch64 Java build and a jar built for macOS Apple Silicon.
-- `x86_64`: Intel Mac. Use a macOS Intel / x64 Java build and a jar built for macOS Intel.
-
-3. Download a macOS JDK 21 or newer for the matching architecture.
-4. Open a new Terminal window and check:
-
-```sh
-java -version
-```
-
 ## 3. Start The App
 
 Put the jar in a folder you can find, for example `Downloads` or `Documents`.
