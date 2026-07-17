@@ -30,7 +30,7 @@
 
 ## What's New In 0.4.0
 
-This guide applies to the `facturx-utils-0.4.0.jar` desktop app.
+This guide applies to the [facturx-utils-0.4.0.jar](https://github.com/Duclevn/facturx-utils-release/releases/download/v0.4.0/facturx-utils-0.4.0.jar) desktop app.
 
 - Convert UBL Invoice/CreditNote to CII and CII/Factur-X XML to UBL from `Conversion`.
 - Generate Base or Full France CTC Flow 1 XML while retaining CII or UBL syntax.
