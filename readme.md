@@ -1,26 +1,46 @@
-# Facturx-utils End-User Guide
+# Facturx-utils 0.4.0 End-User Guide
 
-This guide is for people who receive the desktop jar:
+## Table Of Contents
 
+- [What's New In 0.4.0](#whats-new-in-040)
 
-[facturx-utils-0.3.0.jar](https://github.com/Duclevn/facturx-utils-release/releases/download/v0.3.0/facturx-utils-0.3.0.jar)
+**Getting started**
 
+1. [What You Receive](#1-what-you-receive)
+2. [Install Java](#2-install-java)
+3. [Start The App](#3-start-the-app)
+4. [Open An Invoice](#4-open-an-invoice)
 
-Facturx-utils is a desktop app for opening, viewing, editing, validating, and saving Factur-X invoice files. It supports Factur-X `.pdf` invoices and standalone `.xml` invoices using CII or UBL syntax. CII and UBL are XML formats, not file extensions.
+**Using the app**
 
-## Recent Highlights
+5. [Read The Summary](#5-read-the-summary)
+6. [View A PDF Invoice](#6-view-a-pdf-invoice)
+7. [Edit XML](#7-edit-xml)
+8. [Check Peppol Participant Information](#8-check-peppol-participant-information)
+9. [Validate The Invoice](#9-validate-the-invoice)
+10. [Visualize Edited XML](#10-visualize-edited-xml)
+11. [Convert Between UBL And CII](#11-convert-between-ubl-and-cii)
+12. [Generate France CTC Flow 1 XML](#12-generate-france-ctc-flow-1-xml)
+13. [Save Changes](#13-save-changes)
 
-- Check whether seller, buyer, or manually entered electronic addresses are published as Peppol participants in the Production and Test networks.
-- Compare the exact invoice type independently in each environment and inspect published document types, the Billing Invoice access point, and optional SMP Business Card details.
-- Validate with the dedicated France CTC route and bundled official FNFE RFE 1.4.0.01 resources.
-- Generate France CTC Flow 1 (`F1`) XML in the Base or Full profile from the current CII or UBL invoice.
-- Review, edit, validate, and save converted UBL and generated France CTC F1 XML in dedicated tabs.
-- Benefit from a clearer Summary layout, selectable result text, more responsive background processing, and assorted stability fixes.
-- Open `About Facturx-utils` at the bottom of the left sidebar for the release version, author link, privacy note, quick-start reminder, and acknowledgements for the main components used by the app.
+**Help and safe use**
+
+14. [Troubleshooting](#14-troubleshooting)
+15. [Safe Use Recommendation](#15-safe-use-recommendation)
+
+## What's New In 0.4.0
+
+This guide applies to the `facturx-utils-0.4.0.jar` desktop app.
+
+- Convert UBL Invoice/CreditNote to CII and CII/Factur-X XML to UBL from `Conversion`.
+- Generate Base or Full France CTC Flow 1 XML while retaining CII or UBL syntax.
+- Check Peppol participant publication and exact invoice-type support separately in Production and Test.
+- Use the dedicated two-layer France CTC validation route for Flux 2/CDAR documents.
+- Review, edit, and save converted or generated XML in separate tabs without overwriting the source invoice.
 
 ## 1. What You Receive
 
-The workbench is delivered as one runnable jar. That file contains the app plus the libraries it needs for PDF rendering, Factur-X extraction, XML editing, validation rules, CII-to-UBL conversion, and JavaFX desktop controls.
+The workbench is delivered as one runnable jar. That file contains the app plus the libraries it needs for PDF rendering, Factur-X extraction, XML editing, validation rules, UBL/CII conversion in both directions, and JavaFX desktop controls.
 
 Because those libraries are bundled, the jar can be around 70-80 MB. This is normal for the full offline workbench. Users do not need Maven or the source code; they only need Java 21 or newer and the correct jar for their operating system and CPU architecture.
 
@@ -81,26 +101,8 @@ Put the jar in a folder you can find, for example `Downloads` or `Documents`.
 Open PowerShell in that folder and run:
 
 ```powershell
-java -jar .\facturx-utils-0.3.0.jar
+java -jar .\facturx-utils-0.4.0.jar
 ```
-
-If the jar is in another folder, use the full path:
-
-```powershell
-java -jar "C:\Users\YourName\Downloads\facturx-utils-0.3.0.jar"
-```
-
-Double-clicking the jar may not show useful error messages on some Windows machines, so PowerShell is recommended for the first launch.
-
-The workbench opens maximized by default. Use the standard window controls if you prefer a smaller window.
-
-On macOS, open Terminal in the folder containing the jar and run:
-
-```sh
-java -jar ./facturx-utils-0.3.0.jar
-```
-
-Important: because JavaFX uses operating-system-specific and CPU-specific files, use a jar built for the same platform as the user. For example, share the Windows x64 jar with Windows x64 users, the macOS Intel jar with Intel Mac users, and the macOS Apple Silicon jar with M-series Mac users.
 
 ## 4. Open An Invoice
 
@@ -115,6 +117,7 @@ For a PDF invoice, the app shows:
 - `Summary`: main invoice fields such as invoice number, seller, buyer, totals, profile, and VESID.
 - `PDF`: a rendered preview of the PDF pages.
 - `XML`: the embedded Factur-X XML that can be edited.
+- `Conversion`: UBL-to-CII, CII-to-UBL, and XML-to-PDF actions for the current editor content.
 - `Visualize invoice`: a generated invoice preview from the XML.
 - `Validation`: validation messages and warnings.
 
@@ -133,10 +136,10 @@ Open the `Summary` tab to quickly inspect the invoice:
 - Tax total
 - Grand total
 - Due payable
-- Guideline, syntax, profile, and VESID
+- Container format, XML syntax, guideline, profile, and VESID
 - Seller and buyer Peppol electronic-address information
 
-If the XML is edited and still well-formed, the summary updates from the edited XML.
+For a hybrid PDF, the format is detected from Factur-X/ZUGFeRD XMP metadata and the standard embedded XML filename. This distinction is important for EN 16931 because its BT-24 value can be identical in generic CII and Factur-X. If the XML is edited and still well-formed, the summary updates while retaining the opened PDF's container context.
 
 ## 6. View A PDF Invoice
 
@@ -161,7 +164,7 @@ Available actions:
 - Press `Ctrl+F` to search in the XML.
 - Use `Previous`, `Next`, and `Close` in the search bar.
 - Click `Visualize` to generate a PDF preview from the current XML.
-- Click `Convert to UBL` to convert a CII invoice XML into a UBL XML file.
+- Click `Save as...` to write the current invoice to a new PDF or XML file without first choosing the overwrite/save-copy dialog.
 - Use the editor scrollbars to move vertically or horizontally through long XML files.
 
 When you edit the XML, the app marks the invoice as `Unsaved`.
@@ -200,22 +203,27 @@ The identifier is checked locally before any request is sent. Each lookup is use
 Choose a validation profile in the left sidebar:
 
 - `Default`: general Factur-X / EN 16931 validation.
-- `France CTC`: official FNFE validation in the prescribed order: structural XSD, syntax/profile business rules, then both the standard and transition `_WARNING` French reform artefacts.
+- `France CTC`: first validates the exact detected invoice schema/profile VESID, then runs the legacy 1.3.1 and latest bundled France CTC rule sets for CII/UBL EN 16931, CII/UBL Extended, UBL CreditNote, Factur-X, or CDAR. The legacy set is skipped if it is not bundled.
 
 Click `Validate`.
 
-The app opens the `Validation` tab with an overall result and error, warning, and information counts. Use the severity filter or search field to narrow the findings. Select an issue to inspect its error ID, complete message, element XPath, failed XPath test, validation layer, rule artefact, source document, and Schematron role when the validator supplies those details.
+For a saved Factur-X PDF, the default validation covers the complete hybrid document: Kaltblut checks the Factur-X/ZUGFeRD BR-HYBRID container and XMP rules, veraPDF checks PDF/A-3 conformance, and DDD/phive check the embedded XML schema and business rules. PDF/A findings include the veraPDF rule and PDF object location. Container and XMP checks also run when `France CTC` is selected, alongside that profile's XML validation route.
+
+Before validation is run, the `Validation` tab says `Not validated yet`; opening an invoice does not imply that it passed. A `Compliance & format` strip repeats the detected format, XML syntax, profile, guideline, and VESID from Summary for quick reference before validation.
+
+After validation, the tab shows an overall result and error, warning, and check/information counts. The headline identifies the validation set responsible for a failure when only one set has blocking errors. Results are grouped into user-facing sets such as invoice profile rules, France CTC, and the Factur-X PDF container; engine names such as PHIVE and Kaltblut remain available in technical details.
+
+The table shows actionable errors and warnings, while passed checks and profile-detection messages remain summarized above. Select an issue to inspect its rule ID, description, element XPath, and expected or allowed values when the validator references a bundled code list. Expand `Technical details` for the validator test, engine/layer, rule artefact, source document, and Schematron role when supplied. The technical validator test is the XPath/Schematron condition evaluated by the validation engine; it is diagnostic logic, not usually a value to paste into the invoice.
 
 - Severity
-- Validation layer
+- Validation set
 - Rule code
 - Message
 - Element/context, XPath test, source, and artefact in the detail panel
 
-If there are no validation issues, the table reports an OK result.
-During the 2026 transition period, the app intentionally runs both FNFE French reform variants. Standard findings show future strict compliance, while `FNFE French reform warning` shows the warning-mode controls applicable before September 1, 2026. Similar rule IDs can therefore appear in both layers and are not deduplicated. Warnings remain non-blocking; validator execution failures and error/fatal assertions block strict saving. The warning artefact can still contain explicitly fatal exceptions, including applicable multi-vendor rules.
+If there are no validation issues, the table reports an OK result. The validation table labels detected schema/profile findings as `PHIVE`, France CTC 1.3.1 findings as `FR CTC old`, and findings from the latest bundled France CTC version as `FR CTC`. Both France CTC versions run when 1.3.1 is available in Helger phive; if a future dependency release removes it, only the latest set runs. Warnings remain non-blocking; validator execution failures and error/fatal assertions block strict saving.
 
-For PDF invoices, validation checks the saved PDF. If the XML editor contains unsaved changes, the app also validates the edited XML and combines the results for display.
+If the XML editor contains unsaved changes, validation checks the edited XML because those bytes are not yet embedded in the saved PDF. Save and reopen the PDF to validate the updated hybrid container and XMP metadata.
 
 ## 10. Visualize Edited XML
 
@@ -227,49 +235,56 @@ Use:
 
 - `<` and `>` to move between generated preview pages.
 - `-` and `+` to zoom out and in.
+- `Save as...` to export the generated PDF visualization.
 - The scrollbars to move around pages larger than the view.
 
 This preview helps you inspect how the XML invoice content could look as a readable document.
 
-## 11. Convert CII To UBL
+## 11. Convert Between UBL And CII
 
-Open the `XML` tab and click `Convert to UBL`.
+Select `Conversion` in the left sidebar. The screen uses the current XML editor content, including unsaved edits.
 
-The button is enabled only when the opened invoice uses CII syntax. This can be:
+- Click `UBL to CII` for a UBL 2.1 Invoice or CreditNote. The app opens a `Converted CII` tab.
+- Click `CII to UBL` for CII / Factur-X XML. The app opens a `Converted UBL` tab.
+- Click `XML to PDF` to open a generated preview in the `Visualize invoice` tab.
+- Click `FR CTC F1` to generate a France CTC Flow 1 XML document from supported CII or UBL input.
+
+Each syntax-conversion button is enabled only when the current XML has the matching input syntax. CII input can be:
 
 - A standalone `.xml` file using CII syntax.
 - A Factur-X PDF whose embedded invoice XML is CII.
 
-The app converts the current XML content and opens the result in a `Converted UBL` tab. The original invoice is not overwritten.
+UBL input is a standalone `.xml` UBL Invoice or CreditNote. The original invoice is not overwritten.
 
 In the result tab, you can:
 
 - Edit or format the generated XML.
-- Validate it using the currently selected `Default` or `France CTC` validation profile.
-- Click `Save as...` and choose where to write the UBL XML file.
+- Click `Save as...` and choose where to write the CII or UBL XML file.
 
 The suggested output names follow this pattern:
 
-- `invoice.xml` becomes `invoice.ubl.xml`.
-- `invoice.pdf` becomes `invoice.ubl.xml`.
+- UBL `invoice.xml` becomes `invoice.cii.xml`.
+- UBL `invoice.ubl.xml` becomes `invoice.cii.xml`.
+- CII `invoice.xml` becomes `invoice.ubl.xml`.
+- CII `invoice.pdf` becomes `invoice.ubl.xml`.
 
-In `invoice.ubl.xml`, `ubl` labels the generated XML syntax; the file extension is `.xml`.
+In these names, `cii` or `ubl` labels the generated XML syntax; the file extension remains `.xml`.
 
 For France CTC compatibility, the app also cleans up converted UBL identifiers that have no `schemeID` in contexts where France CTC requires one. The app does not invent a scheme. Properly schemed identifiers are kept.
 
 ## 12. Generate France CTC Flow 1 XML
 
-Open any supported CII or UBL invoice, then select `FR CTC F1` in the `XML` tab.
+Open any supported CII or UBL invoice, then select `Conversion` and click `FR CTC F1`.
 
 1. Choose `Base` or `Full`. `Base` is selected by default.
 2. Click `Generate`.
 3. Review the generated `France CTC F1 Base (...)` or `France CTC F1 Full (...)` tab.
-4. Use `Format XML`, `Validate`, or edit the XML if needed.
+4. Use `Format XML` or edit the XML if needed.
 5. Click `Save as...` and choose an output location.
 
-The generator keeps the source syntax: CII input produces CII F1 XML, while UBL invoice or credit-note input produces UBL F1 XML. It extracts the fields required by the chosen France CTC F1 profile and applies the supported Flow 1 management mappings. Validation in the generated tab checks F1 completeness for the selected Base or Full profile.
+The generator keeps the source syntax: CII input produces CII F1 XML, while UBL invoice or credit-note input produces UBL F1 XML. It follows the XP Z12-012 v1.4 field subset and mapping rules. Ordinary invoices open one generated tab. B8/S8/M8 multi-seller invoices open one tab per unit-invoice number, and B9/S9/M9 bidirectional invoices open the two required directions.
 
-The source invoice is not overwritten. The suggested filename is prefixed with the profile, for example `Base_invoice.xml` or `Full_invoice.xml`. Review validation findings before using the result in a production reporting workflow.
+The source invoice is not overwritten. The suggested filename is prefixed with the profile; split outputs also include the unit-invoice identifier.
 
 ## 13. Save Changes
 
@@ -309,7 +324,7 @@ java -version
 Run it from PowerShell so you can see the error:
 
 ```powershell
-java -jar .\facturx-utils-0.3.0.jar
+java -jar .\facturx-utils-0.4.0.jar
 ```
 
 Check that:
